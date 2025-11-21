@@ -1,0 +1,8 @@
+[build]
+  command = "npm run build"
+  publish = "build"
+
+[dev]
+  # Useful for local netlify dev: start vite dev server
+  command = "npm run dev"
+  port = 3000
