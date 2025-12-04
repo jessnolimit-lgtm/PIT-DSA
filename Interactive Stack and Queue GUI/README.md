@@ -1,144 +1,45 @@
-# Interactive Stack and Queue GUI
+this is a our Data Structure and Algirith PIT which is a stack and queue, with a simple interactive UI that you can apply the operations of a stack and queue. This UI contains buttons and kanang naay animations gamay like pop animation and to use it , the operation of a stack you can just simply add elements it can be character or a int because stack doesnt care of which type of data type, it only follows the LIFO behavior And also it has peek functions that u can jsut peek the top element . and for the Queue still can you do the Queueing operations with the buttons and you can also peek the front element. 
 
-This repository contains a small interactive visualizer for two basic data structures: Stack and Queue. It includes a React version (`src/App.tsx`) and a plain JavaScript implementation (`src/script.js`) used for reference or static hosting.
+DAY(1)
+In my first day of making this i planned of what layout or what design of the UI i make so i browse in the yt for many hours just to find my reference and still i can't pick up one so i planned by myself and i decided that i will make it in react for the better UI and in order to make it looks modern and a side panel so the operations in the panel and in the right space is where the stack and queue seen so it can be visualize.
 
-Source design inspiration: https://www.figma.com/design/MbVpMxhuI09oUgSvjz63Wp/Interactive-Stack-and-Queue-GUI
+DAY(2)
+In my second day i set up my react prjects and i am noot good at react so i set it up first , i dont have that much knowledge of react so i struggle setting it up like installing dependencies and some json files that i cant figure out whats missing so i take a break.
 
-## Prerequisites
+DAY(3)
+I still setting it up because i cant figure out whats the error of it so i ask helo in ai so it became less hassle to me , then i alreadg figure it out but i cant process the code first although i know the logiv of it and i take a rest.
 
-- Node.js (LTS recommended) and npm
-- Recommended: run commands from Command Prompt (`cmd.exe`) or use `npm.cmd` in PowerShell if your PowerShell execution policy blocks script files.
-
-## Install & Run
-
-Install dependencies:
-
-```powershell
-cd "c:\Users\tidul\OneDrive\Desktop\Final PIT DSA\Interactive Stack and Queue GUI"
-npm.cmd install
-```
-
-Start development server:
-
-```powershell
-npm.cmd run dev
-```
-
-Open the URL shown by Vite (usually `http://localhost:3000/` — Vite will pick another port automatically if 3000 is busy).
-
-If you prefer PowerShell and see an execution policy error when running `npm` scripts, you can run:
-
-```powershell
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
-```
-
-## Project structure (high level)
-
-- `index.html` — root HTML for static demo (also used by Vite during dev). Contains the base DOM markup and references `script.js` for the non-React demo.
-- `package.json` — project manifest and dependencies.
-- `vite.config.ts` — Vite configuration and some import aliases (aliases like `vaul@1.1.2` map to `vaul` to support version-suffixed imports in components).
-- `src/` — application source code
-  - `App.tsx` — React single-file application that builds the same interactive Stack/Queue UI using a useEffect hook and direct DOM manipulation. This is the entry used by the React app.
-  - `main.tsx` — React entry point that mounts `App` into the DOM.
-  - `index.html` — app HTML (used by Vite). Mirrors the static `index.html` top-level file and contains the same UI markup.
-  - `index.css`, `styles.css`, `src/styles/globals.css` — stylesheet files used by the app for layout and theme.
-  - `script.js` — Plain JavaScript implementation of the visualizer (DOM + event listeners). Useful if you want a non-React static version.
-  - `Attributions.md` — design/asset attribution notes.
-  - `components/` — UI helper components and utilities (mostly Radix / UI primitives wrappers):
-    - `figma/ImageWithFallback.tsx` — small utility component for loading images with a fallback.
-    - `ui/` — a collection of reusable UI primitives (accordion, dialog, drawer, tooltip, buttons, etc.). These are generic primitives used across the UI. File names reflect the component they export, e.g. `drawer.tsx`, `dialog.tsx`, `button.tsx`, etc.
-
-## Where the core Stack and Queue logic lives
-
-There are two implementations in the repository:
-
-1. React-based (used when running the React app via Vite):
-   - File: `src/App.tsx`
-   - Key pieces:
-     - State variables: `currentStructure`, `stackItems: string[]`, `queueItems: string[]`.
-     - Core operation functions:
-       - `handleAdd()` — reads input and either `stackItems.push(value)` (stack) or `queueItems.push(value)` (queue).
-       - `handleRemove()` — for stack uses `stackItems.pop()`; for queue uses `queueItems.shift()`.
-       - `handlePeek()` — for stack uses `stackItems[stackItems.length - 1]`; for queue uses `queueItems[0]`.
-       - `handleClear()` — clears the current structure's array.
-     - UI synchronization functions:
-       - `updateUI()` — updates UI counters, button states, and triggers rendering.
-       - `renderVisualization()`, `renderStack(items)`, `renderQueue(items)` — generate HTML and write it to the visualization container.
-     - Event wiring: the component attaches event listeners (button clicks, input events) in a `useEffect` and updates the visualization by writing into `visualization-container`.
-
-2. Plain JavaScript implementation (static demo):
-   - File: `src/script.js` (and the static `index.html` used for non-React demos)
-   - The code mirrors the React version: arrays `stackItems` and `queueItems`, and the same functions `handleAdd`, `handleRemove`, `handlePeek`, `handleClear`, plus `renderStack`/`renderQueue`.
-
-Notes about the implementations:
-- The stack uses JavaScript array `push`/`pop` where the top of the stack is the array's end. These are O(1) operations.
-- The queue uses `push` to enqueue and `shift` to dequeue. `shift` is O(n) because it reindexes the array — for small demos this is fine; for large-scale data use a linked list or circular buffer for O(1) dequeues.
-- Both implementations update the UI by manipulating the DOM (`innerHTML`, class toggles). The React `App.tsx` currently uses direct DOM manipulation inside `useEffect` rather than idiomatic React state + JSX. It works, but can be refactored to use `useState` / `useRef` and conditional JSX rendering for clearer React patterns.
-
-## Important implementation details & gotchas
-
-- `App.tsx` and `script.js` both assume the DOM contains elements with specific IDs and classes (e.g., `#element-input`, `.structure-btn`, `#visualization-container`). If you edit markup, keep IDs/classes in sync.
-- In development on Windows PowerShell you may hit an execution policy block when running `npm` scripts; `npm.cmd` or running from `cmd.exe` avoids that.
-- `vite.config.ts` includes aliases that map imports with version suffixes to plain package names — e.g., `'vaul@1.1.2': 'vaul'`. This is done because some components import packages using a versioned name (like `import { Drawer } from 'vaul@1.1.2'`). Keep aliases in sync with `package.json` if you change package versions.
-
-## Testing & manual checks
-
-1. Start dev server (`npm.cmd run dev`) and open the shown URL.
-2. Try the main flows:
-   - Switch between Stack and Queue.
-   - Add multiple elements; verify visualization and `Size` updates.
-   - Remove elements (Pop / Dequeue) and observe animations.
-   - Use Peek and Clear.
-3. Watch browser console for runtime errors (null DOM lookups or missing element IDs). If you see errors referencing `document.getElementById(...)` returning `null`, check that the DOM markup includes the element with the correct ID.
-
-## Suggested improvements
-
-- Convert `App.tsx` to idiomatic React: use `useState` for `stackItems` / `queueItems`, render JSX for visualization instead of `innerHTML`, and use `ref`s for direct node access when needed. This will make the component easier to maintain and type-check.
-- Replace `queueItems.shift()` with a queue implementation that provides O(1) dequeue (circular buffer or linked list) if you expect many operations.
-- Add TypeScript types and enable stricter compiler options. Install `typescript` and `@types/react` / `@types/react-dom` as devDependencies:
-
-```powershell
-npm.cmd install -D typescript @types/react @types/react-dom
-```
-
-## Where to look for help
-
-- `src/App.tsx` — main React logic and a good starting point for understanding app flow.
-- `src/script.js` — plain JS version that mirrors behavior and is easier to reason about if you prefer DOM code.
-- `src/components/ui/*` — reusable UI primitives; mostly wrappers around Radix / design-system pieces.
+Day(4)
+I already have my UI but it looks off and so many bugs and for many hours i cant figure it out so i ask ai to modify my code but theres no animations.
 
 
----
-Generated on 2025-11-21 — updated to document files and how the visualizer maps to code.
+Day(5)
+in day 5 i already have the UI but there is so much bugs then suddenly my UI doesnt working so for many hours i fix it and after that i figure it out, akways the missing dependencies.
 
-  # Interactive Stack and Queue GUI
+DAY(6)
+I still fixing bugs and modifying it but my UI looks odd and ugly so i think about it and figure out that i can use web app to make an ui just a drag and drop and convert it into tsx so i made it and my ui looks better 
 
-  This is a code bundle for Interactive Stack and Queue GUI. The original project is available at https://www.figma.com/design/MbVpMxhuI09oUgSvjz63Wp/Interactive-Stack-and-Queue-GUI.
+DAY(7)
+Im working in my Backend and still there is some bugs like the buttonns do not work and im still thinking about it.
 
-  ## Running the code
+Day(8)
+Im struggling so i decide that i ask ai about it , but i cant understand what ai always give to me and it cause so many erros so i build my backend in python and API but i dint have that much knowledge in API so i make a pure python stack and queue program and ask ai to convert it into js.
 
-  Run `npm i` to install the dependencies.
+DAY(9)
+I already made it , it is very simple yet it follows the principle of stack and queue so i planned to push it in my git so i did it.
 
-  Run `npm run dev` to start the development server.
-  
-  ## Deploying to Netlify
+DAY(9)
+It is already in my repository but sir jef wants the UI that accesible or he can use it so i plan again to deplpy it in netlify.
 
-  This project is configured to build into a `build/` folder (see `vite.config.ts`). To deploy on Netlify:
+DAY(9)
+this day i struggle the most because there is so much error deploying my project so i redo the file structure and fix it
 
-  - The build command is `npm run build` and the publish directory is `build/`.
-  - A `netlify.toml` file is included in the repository which tells Netlify to run `npm run build` and publish the `build` directory.
-  - If you configure Netlify manually, set:
-    - Build command: `npm run build`
-    - Publish directory: `build`
+DAY(10)
+so in this day i still figuring it out whats the problem for many hours and still cant figure it out
 
-  Notes:
-  - `vite.config.ts` sets `base: './'` and `outDir: 'build'` so generated assets are relative and placed into `build/` (this is suitable for Netlify).
-  - If Netlify fails to find a publish folder, confirm the deploy settings and that `npm run build` runs successfully in the Netlify build log.
+DAY(11)
+so in this day i alredy figure it out and add a netlify file into my project and its missing only build commands
 
- # to run the server
- cd "c:\Users\tidul\OneDrive\Desktop\Final PIT DSA\Interactive Stack and Queue GUI"
-npm.cmd install
-# in cmd
-cd "c:\Users\tidul\OneDrive\Desktop\Final PIT DSA\Interactive Stack and Queue GUI"
-npm install
- 
+Annd the following day i still thinking modifications about iit...
+
+
