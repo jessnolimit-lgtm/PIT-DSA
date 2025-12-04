@@ -7,65 +7,53 @@ export default function App() {
     let stackItems: string[] = [];
     let queueItems: string[] = [];
 
-    // DOM Elements (guarded to avoid runtime null exceptions)
+    // DOM Elements
     const structureBtns = document.querySelectorAll('.structure-btn');
-    const elementInput = document.getElementById('element-input') as HTMLInputElement | null;
-    const addBtn = document.getElementById('add-btn') as HTMLButtonElement | null;
-    const removeBtn = document.getElementById('remove-btn') as HTMLButtonElement | null;
-    const peekBtn = document.getElementById('peek-btn') as HTMLButtonElement | null;
-    const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement | null;
-    const peekValue = document.getElementById('peek-value') as HTMLDivElement | null;
-    const sizeValue = document.getElementById('size-value') as HTMLSpanElement | null;
-    const statusValue = document.getElementById('status-value') as HTMLSpanElement | null;
-    const visualizationContainer = document.getElementById('visualization-container') as HTMLDivElement | null;
+    const elementInput = document.getElementById('element-input') as HTMLInputElement;
+    const addBtn = document.getElementById('add-btn') as HTMLButtonElement;
+    const removeBtn = document.getElementById('remove-btn') as HTMLButtonElement;
+    const peekBtn = document.getElementById('peek-btn') as HTMLButtonElement;
+    const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
+    const peekValue = document.getElementById('peek-value') as HTMLDivElement;
+    const sizeValue = document.getElementById('size-value') as HTMLSpanElement;
+    const statusValue = document.getElementById('status-value') as HTMLSpanElement;
+    const visualizationContainer = document.getElementById('visualization-container') as HTMLDivElement;
 
     // Labels that change based on structure
-    const addLabel = document.getElementById('add-label') as HTMLLabelElement | null;
-    const removeLabel = document.getElementById('remove-label') as HTMLLabelElement | null;
-    const peekLabel = document.getElementById('peek-label') as HTMLLabelElement | null;
-    const removeText = document.getElementById('remove-text') as HTMLSpanElement | null;
-    const peekText = document.getElementById('peek-text') as HTMLSpanElement | null;
-    const clearText = document.getElementById('clear-text') as HTMLSpanElement | null;
-    const vizTitle = document.getElementById('viz-title') as HTMLHeadingElement | null;
-    const vizSubtitle = document.getElementById('viz-subtitle') as HTMLParagraphElement | null;
-    const complexity1Label = document.getElementById('complexity-1-label') as HTMLDivElement | null;
-    const complexity2Label = document.getElementById('complexity-2-label') as HTMLDivElement | null;
-    const operationsTitle = document.querySelector('.operations-title') as HTMLHeadingElement | null;
-
-    // If critical DOM nodes aren't present, bail out to avoid exceptions (useful during SSR or unexpected markup changes)
-    if (!elementInput || !addBtn || !removeBtn || !peekBtn || !clearBtn || !visualizationContainer || !addLabel || !removeLabel || !peekLabel || !removeText || !peekText || !clearText || !vizTitle || !vizSubtitle || !complexity1Label || !complexity2Label || !operationsTitle) {
-      return;
-    }
+    const addLabel = document.getElementById('add-label') as HTMLLabelElement;
+    const removeLabel = document.getElementById('remove-label') as HTMLLabelElement;
+    const peekLabel = document.getElementById('peek-label') as HTMLLabelElement;
+    const removeText = document.getElementById('remove-text') as HTMLSpanElement;
+    const peekText = document.getElementById('peek-text') as HTMLSpanElement;
+    const clearText = document.getElementById('clear-text') as HTMLSpanElement;
+    const vizTitle = document.getElementById('viz-title') as HTMLHeadingElement;
+    const vizSubtitle = document.getElementById('viz-subtitle') as HTMLParagraphElement;
+    const complexity1Label = document.getElementById('complexity-1-label') as HTMLDivElement;
+    const complexity2Label = document.getElementById('complexity-2-label') as HTMLDivElement;
+    const operationsTitle = document.querySelector('.operations-title') as HTMLHeadingElement;
 
     // Event Listeners
-    const onStructureClick = (evt: Event) => {
-      const btn = evt.currentTarget as HTMLButtonElement;
-      const structure = btn.dataset.structure;
-      if (structure) switchStructure(structure);
-    };
+    structureBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const structure = (btn as HTMLButtonElement).dataset.structure;
+        switchStructure(structure!);
+      });
+    });
 
-    structureBtns.forEach((btn) => btn.addEventListener('click', onStructureClick));
+    addBtn.addEventListener('click', handleAdd);
+    removeBtn.addEventListener('click', handleRemove);
+    peekBtn.addEventListener('click', handlePeek);
+    clearBtn.addEventListener('click', handleClear);
 
-    const onAdd = () => handleAdd();
-    const onRemove = () => handleRemove();
-    const onPeek = () => handlePeek();
-    const onClear = () => handleClear();
+    elementInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        handleAdd();
+      }
+    });
 
-    addBtn.addEventListener('click', onAdd);
-    removeBtn.addEventListener('click', onRemove);
-    peekBtn.addEventListener('click', onPeek);
-    clearBtn.addEventListener('click', onClear);
-
-    const onKeyPress = (e: KeyboardEvent) => {
-      if (e.key === 'Enter') handleAdd();
-    };
-
-    const onInput = () => {
+    elementInput.addEventListener('input', () => {
       addBtn.disabled = !elementInput.value.trim();
-    };
-
-    elementInput.addEventListener('keypress', onKeyPress);
-    elementInput.addEventListener('input', onInput);
+    });
 
     // Functions
     function switchStructure(structure: string) {
@@ -254,17 +242,6 @@ export default function App() {
 
     // Initialize
     updateUI();
-
-    // Cleanup listeners on unmount to avoid duplicates
-    return () => {
-      structureBtns.forEach((btn) => btn.removeEventListener('click', onStructureClick));
-      addBtn.removeEventListener('click', onAdd);
-      removeBtn.removeEventListener('click', onRemove);
-      peekBtn.removeEventListener('click', onPeek);
-      clearBtn.removeEventListener('click', onClear);
-      elementInput.removeEventListener('keypress', onKeyPress);
-      elementInput.removeEventListener('input', onInput);
-    };
   }, []);
 
   return (
